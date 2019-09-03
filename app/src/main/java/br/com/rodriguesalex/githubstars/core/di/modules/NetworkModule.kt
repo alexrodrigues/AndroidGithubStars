@@ -1,6 +1,10 @@
 package br.com.rodriguesalex.githubstars.core.di.modules
 
 import br.com.rodriguesalex.githubstars.core.api.ApiGithub
+import br.com.rodriguesalex.githubstars.features.home.domain.StarsRepository
+import br.com.rodriguesalex.githubstars.features.home.domain.StarsRepositoryImpl
+import br.com.rodriguesalex.githubstars.features.home.domain.service.StarsService
+import br.com.rodriguesalex.githubstars.features.home.domain.service.StarsServiceImpl
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -35,9 +39,9 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, url : String): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl("https://api.github.com/search/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -54,6 +58,18 @@ class NetworkModule {
     @Singleton
     fun provideGithubApi(retrofit: Retrofit): ApiGithub {
         return retrofit.create(ApiGithub::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiService(apiGithub: ApiGithub): StarsService {
+        return StarsServiceImpl(apiGithub)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStarsRepository(service: StarsService): StarsRepository {
+        return StarsRepositoryImpl(service)
     }
 
 }

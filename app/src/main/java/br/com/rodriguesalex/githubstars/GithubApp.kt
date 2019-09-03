@@ -1,11 +1,14 @@
 package br.com.rodriguesalex.githubstars
 
-import android.app.Application
+import dagger.android.DaggerApplication
+import br.com.rodriguesalex.githubstars.core.di.DaggerAppComponent
 
-class GithubApp: Application() {
+class GithubApp: DaggerApplication() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
+    private val applicationInjector = DaggerAppComponent.builder()
+        .application(this)
+        .build()
+
+    override fun applicationInjector() = applicationInjector
 
 }

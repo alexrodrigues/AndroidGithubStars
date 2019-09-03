@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class ActivityBindingModule {
+abstract class ActivityModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [StarsModule::class])
     internal abstract fun starsActivity(): StarsActivity
